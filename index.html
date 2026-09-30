@@ -124,7 +124,7 @@ button{font:inherit}
   gap:clamp(45px,8vw,130px);align-items:center;
 }
 .section-title{
-  font-size:clamp(50px,8vw,120px);line-height:.85;letter: spacing -0.01;em;
+  font-size:clamp(50px,8vw,120px);line-height:.85;letter-spacing:-0.01em;
   margin:18px 0;font-weight:900;
 }
 .about-copy{color:#999;line-height:1.85;font-size:14px;max-width:650px}
@@ -237,6 +237,47 @@ button{font:inherit}
   .social-item{font-size:22px}
 }
 
+
+/* ===== IN-PAGE PDF VIEWER ===== */
+.pdf-overlay{
+  position:fixed;inset:0;z-index:100000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .3s ease,visibility .3s ease;
+}
+.pdf-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+.pdf-popup{
+  position:relative;width:min(1050px,96vw);height:min(90vh,900px);
+  background:#0b0b0b;border:1px solid #292929;border-radius:20px;
+  overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.8);
+  transform:translateY(28px) scale(.96);
+  transition:transform .35s ease;
+}
+.pdf-overlay.active .pdf-popup{transform:translateY(0) scale(1)}
+.pdf-header{
+  height:60px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px 0 22px;background:#101010;border-bottom:1px solid #252525;
+}
+.pdf-title{
+  color:#fff;font-size:10px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.pdf-close{
+  width:38px;height:38px;display:grid;place-items:center;
+  border:1px solid #333;border-radius:50%;background:transparent;color:#fff;
+  font-size:24px;line-height:1;cursor:pointer;transition:.25s ease;
+}
+.pdf-close:hover{background:#fff;color:#000;border-color:#fff}
+.pdf-frame{width:100%;height:calc(100% - 60px);display:block;border:0;background:#222}
+@media(max-width:600px){
+  .pdf-overlay{padding:10px}
+  .pdf-popup{width:100%;height:92vh;border-radius:12px}
+  .pdf-header{height:55px;padding:0 14px}
+  .pdf-frame{height:calc(100% - 55px)}
+}
+
 </style>
 </head>
 <body>
@@ -272,9 +313,9 @@ button{font:inherit}
 
   <div class="hero-photo" aria-label="Profile photograph">
     <!-- Put your photo at assets/profile.png -->
-    <img src="profile.png" alt="Shubhankar profile photograph"
+    <img src="assets/profile.png" alt="Shubhankar profile photograph"
          onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-    <div class="photo-placeholder" style="display:none">YOUR PHOTO /profile.png</div>
+    <div class="photo-placeholder" style="display:none">YOUR PHOTO / assets/profile.png</div>
   </div>
 
   <div class="hero-right">
@@ -284,10 +325,9 @@ button{font:inherit}
 
   <!-- Resume -->
   <a
-    class="btn light"
-    href="Shubhankar_CV_CCNA_certified.pdf"
-    target="_blank"
-    rel="noopener"
+    class="btn light pdf-open"
+    href="assets/SHUBHANKAR-RESUME.pdf"
+    data-pdf-title="SHUBHANKAR — RESUME"
   >
     View Resume ↗
   </a>
@@ -319,7 +359,7 @@ button{font:inherit}
       </div>
     </div>
     <div class="about-photo">
-      <img src="profiledp.jpg" alt="Shubhankar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+      <img src="assets/profiledp.jpg" alt="Shubhankar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
       <div class="about-placeholder" style="display:none">YOUR DP</div>
     </div>
   </div>
@@ -393,10 +433,9 @@ button{font:inherit}
 
         <!-- Certificate PDF -->
         <a
-          href="CCNA-Certificate.pdf"
-          target="_blank"
-          rel="noopener"
-          class="cert-btn cert-btn-primary"
+          href="assets/CCNA-Certificate.pdf"
+          class="cert-btn cert-btn-primary pdf-open"
+          data-pdf-title="CCNA — CERTIFICATE"
         >
           <span>View Certificate</span>
           <span>↗</span>
@@ -457,7 +496,7 @@ button{font:inherit}
       <!-- Instagram -->
       <a
         class="social-item instagram"
-        href="YOUR_INSTAGRAM_LINK"
+        href="https://www.instagram.com/mr.shubhu.28/"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Instagram"
@@ -479,7 +518,7 @@ button{font:inherit}
       <!-- WhatsApp -->
       <a
         class="social-item whatsapp"
-        href="https://wa.me/YOUR_NUMBER"
+        href="https://wa.me/916395969721"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"
@@ -516,6 +555,18 @@ button{font:inherit}
   </div>
 </div>
 
+
+<!-- ===== IN-PAGE PDF VIEWER ===== -->
+<div class="pdf-overlay" id="pdfOverlay" aria-hidden="true">
+  <div class="pdf-popup" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+    <div class="pdf-header">
+      <div class="pdf-title" id="pdfTitle">DOCUMENT</div>
+      <button class="pdf-close" id="pdfClose" type="button" aria-label="Close document">×</button>
+    </div>
+    <iframe class="pdf-frame" id="pdfFrame" src="" title="PDF Viewer"></iframe>
+  </div>
+</div>
+
 <script>
 (() => {
   const loader=document.getElementById('loader');
@@ -537,37 +588,87 @@ button{font:inherit}
   },{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-  /* ===== ADDED: LET'S TALK POPUP ===== */
+  /* ===== LET'S TALK + CONTACT ME SOCIAL POPUP ===== */
   const socialPopupBtn=document.getElementById('socialPopupBtn');
+  const contactBtn=document.getElementById('contactBtn');
   const socialOverlay=document.getElementById('socialOverlay');
   const socialClose=document.getElementById('socialClose');
 
   function openSocialPopup(){
+    if(!socialOverlay) return;
     socialOverlay.classList.add('active');
     socialOverlay.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
   }
 
   function closeSocialPopup(){
+    if(!socialOverlay) return;
     socialOverlay.classList.remove('active');
     socialOverlay.setAttribute('aria-hidden','true');
     document.body.style.overflow='';
   }
 
-  if(socialPopupBtn && socialOverlay && socialClose){
-    socialPopupBtn.addEventListener('click',openSocialPopup);
-    socialClose.addEventListener('click',closeSocialPopup);
+  if(socialPopupBtn) socialPopupBtn.addEventListener('click',openSocialPopup);
+  if(contactBtn) contactBtn.addEventListener('click',openSocialPopup);
+  if(socialClose) socialClose.addEventListener('click',closeSocialPopup);
 
+  if(socialOverlay){
     socialOverlay.addEventListener('click',(e)=>{
       if(e.target===socialOverlay) closeSocialPopup();
     });
+  }
 
-    document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape' && socialOverlay.classList.contains('active')){
-        closeSocialPopup();
-      }
+  /* ===== IN-PAGE PDF VIEWER ===== */
+  const pdfOverlay=document.getElementById('pdfOverlay');
+  const pdfFrame=document.getElementById('pdfFrame');
+  const pdfClose=document.getElementById('pdfClose');
+  const pdfTitle=document.getElementById('pdfTitle');
+  const pdfButtons=document.querySelectorAll('.pdf-open');
+
+  function openPDF(file,title){
+    if(!pdfOverlay || !pdfFrame) return;
+    pdfFrame.src=file;
+    if(pdfTitle) pdfTitle.textContent=title || 'DOCUMENT';
+    pdfOverlay.classList.add('active');
+    pdfOverlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  function closePDF(){
+    if(!pdfOverlay) return;
+    pdfOverlay.classList.remove('active');
+    pdfOverlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    setTimeout(()=>{
+      if(pdfFrame) pdfFrame.src='';
+    },300);
+  }
+
+  pdfButtons.forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+      e.preventDefault();
+      openPDF(btn.getAttribute('href'),btn.dataset.pdfTitle);
+    });
+  });
+
+  if(pdfClose) pdfClose.addEventListener('click',closePDF);
+
+  if(pdfOverlay){
+    pdfOverlay.addEventListener('click',(e)=>{
+      if(e.target===pdfOverlay) closePDF();
     });
   }
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'){
+      if(pdfOverlay && pdfOverlay.classList.contains('active')){
+        closePDF();
+      }else if(socialOverlay && socialOverlay.classList.contains('active')){
+        closeSocialPopup();
+      }
+    }
+  });
+
 
 })();
 </script>
