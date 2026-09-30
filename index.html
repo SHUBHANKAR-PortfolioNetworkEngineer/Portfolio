@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shubhankar — Network Engineer Portfolio">
+<title>SHUBHANKAR — Network Engineer</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#050505;
+  --panel:#101010;
+  --text:#f4f4f4;
+  --muted:#8e8e8e;
+  --line:#252525;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Arial,sans-serif;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+::selection{background:#fff;color:#000}
+
+/* LOADER */
+#loader{
+  position:fixed;inset:0;background:#050505;z-index:9999;
+  display:grid;place-items:center;transition:transform 1s cubic-bezier(.8,0,.2,1);
+}
+#loader.hide{transform:translateY(-100%)}
+.loader-inner{text-align:center;width:min(720px,82vw)}
+.loader-kicker{
+  font-size:11px;letter-spacing:.28em;color:#777;margin-bottom:24px;
+  text-transform:uppercase;
+}
+.loader-name{font-size:clamp(38px,8vw,90px);font-weight:900;letter-spacing:-.07em}
+.loader-percent{
+  margin-top:26px;font-size:clamp(48px,10vw,100px);font-weight:800;
+  letter-spacing:-.08em;
+}
+.loader-track{height:2px;background:#252525;margin:24px 0 12px}
+.loader-fill{height:100%;width:1%;background:#fff}
+.loader-status{display:flex;justify-content:space-between;color:#666;font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;height:76px;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,5vw,72px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(5,5,5,.72);backdrop-filter:blur(18px);
+}
+.logo{font-weight:800;letter-spacing:-.05em;font-size:20px}
+.nav-links{display:flex;gap:26px;font-size:11px;color:#aaa}
+.nav-links a{transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  border:1px solid #444;border-radius:999px;padding:10px 17px;
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;position:relative;display:grid;place-items:center;
+  overflow:hidden;background:
+  radial-gradient(circle at 50% 48%,#333 0,#171717 25%,#090909 55%,#050505 78%);
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),transparent 45%,rgba(0,0,0,.55));
+}
+.hero-photo{
+  position:absolute;inset:10% 20% 0;display:grid;place-items:end center;
+}
+.hero-photo img{
+  width:min(560px,72vw);height:min(82vh,760px);object-fit:cover;
+  object-position:center top;
+  filter:none; contrast:1.02;
+  mask-image:linear-gradient(to bottom,#000 72%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 65%,transparent 100%);
+  opacity:.96;
+}
+.photo-placeholder{
+  width:min(560px,72vw);height:min(82vh,760px);
+  display:grid;place-items:center;
+  color:#555;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  border:1px dashed #333;
+  mask-image:linear-gradient(to bottom,#000 72%,transparent 100%);
+}
+.hero-left,.hero-right,.hero-bottom{
+  position:absolute;z-index:3;
+}
+.hero-left{left:clamp(20px,7vw,100px);top:50%;transform:translateY(-50%);max-width:300px}
+.hero-right{right:clamp(20px,7vw,100px);top:80%;transform:translateY(-50%);max-width:280px;text-align:right}
+.eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#888}
+.hero h1{
+  font-size:clamp(52px,8vw,120px);line-height:.92;margin:18px 0;
+  letter-spacing:-.055em;word-spacing:.10em;font-weight:900;
+}
+.hero h1 br{line-height:1.12;}
+.hero-role{font-size:14px;color:#bbb;line-height:1.6}
+.hero-right p{font-size:12px;line-height:1.7;color:#888}
+.hero-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.btn{
+  padding:12px 18px;border:1px solid #555;border-radius:999px;
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+}
+.btn.light{background:#fff;color:#000;border-color:#fff}
+.hero-bottom{left:clamp(20px,5vw,70px);bottom:28px;font-size:9px;color:#777;letter-spacing:.16em;text-transform:uppercase}
+
+/* SECTIONS */
+.section{
+  position:relative;padding:140px clamp(20px,7vw,100px);
+  border-top:1px solid var(--line);background:#070707;
+}
+.section-grid{
+  max-width:1250px;margin:auto;display:grid;grid-template-columns:1fr 1.35fr;
+  gap:clamp(45px,8vw,130px);align-items:center;
+}
+.section-title{
+  font-size:clamp(50px,8vw,120px);line-height:.85;letter: spacing -0.01;em;
+  margin:18px 0;font-weight:900;
+}
+.about-copy{color:#999;line-height:1.85;font-size:14px;max-width:650px}
+.about-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.pill{border:1px solid #292929;padding:11px 14px;border-radius:999px;font-size:10px;color:#bbb}
+.about-photo{
+  aspect-ratio:4/5;max-width:420px;margin:auto;overflow:hidden;
+  border:1px solid #292929;background:#111;
+}
+.about-photo img{width:100%;height:100%;object-fit:cover;filter:none}
+.about-placeholder{height:100%;display:grid;place-items:center;color:#555;font-size:11px;letter-spacing:.16em}
+
+/* SKILLS */
+.skills-wrap{max-width:1250px;margin:auto}
+.skills-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:55px}
+.skills-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+}
+.skill-card{
+  min-height:230px;padding:30px;border:1px solid #202020;background:#0c0c0c;
+  transition:transform .3s,border-color .3s;background-image:linear-gradient(135deg,rgba(255,255,255,.035),transparent 45%);
+}
+.skill-card:hover{transform:translateY(-5px);border-color:#555}
+.skill-number{font-size:10px;color:#555;letter-spacing:.16em}
+.skill-card h3{font-size:28px;letter-spacing:-.05em;margin:42px 0 20px}
+.skill-list{display:flex;flex-wrap:wrap;gap:8px}
+.skill-list span{font-size:10px;color:#999;border:1px solid #292929;padding:8px 10px;border-radius:999px}
+
+/* FOOTER PREVIEW */
+.footer{
+  padding:120px 7vw;border-top:1px solid #222;text-align:center;background:#050505;
+}
+.footer h2{font-size:clamp(50px,9vw,130px);letter-spacing:-.09em;margin:0}
+.footer p{color:#777;font-size:12px}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s ease}
+.reveal.show{opacity:1;transform:none}
+
+@media(max-width:850px){
+  .nav{height:64px}.nav-links{display:none}
+  .hero{min-height:850px}
+  .hero-photo{inset:15% 0 8%}
+  .hero-photo img,.photo-placeholder{width:88vw;height:70vh}
+  .hero-left{top:21%;left:24px;transform:none}
+  .hero-right{right:24px;bottom:15%;top:auto;transform:none;text-align:right}
+  .hero h1{font-size:58px}
+  .hero-actions{flex-wrap:wrap}
+  .section{padding:100px 24px}
+  .section-grid{grid-template-columns:1fr}
+  .skills-head{display:block}.skills-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition:none!important}
+}
+
+/* ===== ADDED: LET'S TALK SOCIAL POPUP ===== */
+.social-overlay{
+  position:fixed;inset:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .3s ease,visibility .3s ease;
+}
+.social-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+.social-popup{
+  position:relative;width:min(620px,100%);padding:44px;
+  background:#0b0b0b;border:1px solid #292929;border-radius:24px;
+  box-shadow:0 40px 120px rgba(0,0,0,.75);
+  transform:translateY(28px) scale(.96);
+  transition:transform .35s ease;
+}
+.social-overlay.active .social-popup{transform:translateY(0) scale(1)}
+.social-close{
+  position:absolute;top:18px;right:18px;width:40px;height:40px;
+  display:grid;place-items:center;border:1px solid #333;border-radius:50%;
+  background:transparent;color:#fff;font-size:25px;line-height:1;
+  cursor:pointer;transition:.25s ease;
+}
+.social-close:hover{background:#fff;color:#000}
+.social-eyebrow{margin-bottom:18px;color:#777;font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+.social-popup h2{
+  margin:0;font-size:clamp(45px,8vw,78px);line-height:.88;
+  letter-spacing:-.06em;font-weight:900;
+}
+.social-popup h2 span{color:#20d47a}
+.social-popup>p{margin:20px 0 30px;color:#888;font-size:13px;line-height:1.6}
+.social-icons{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.social-item{
+  aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+  border:1px solid #292929;border-radius:16px;background:#111;color:#fff;
+  text-decoration:none;font-size:25px;
+  transition:transform .25s ease,background .25s ease,border-color .25s ease,color .25s ease;
+}
+.social-item:hover{transform:translateY(-6px);background:#fff;color:#000;border-color:#fff}
+.social-item.instagram:hover{color:#e1306c}
+.social-item.whatsapp:hover{color:#25d366}
+.social-item.linkedin:hover{color:#0a66c2}
+.social-item.x-twitter:hover{color:#000}
+.social-item.youtube:hover{color:#f00}
+.social-item.tiktok:hover{color:#000}
+.social-item.facebook:hover{color:#1877f2}
+.social-item.github:hover{color:#000}
+.social-item.reddit:hover{color:#ff4500}
+.social-item.email:hover{color:#555}
+@media(max-width:600px){
+  .social-popup{padding:34px 22px;border-radius:20px}
+  .social-icons{grid-template-columns:repeat(3,1fr)}
+  .social-item{font-size:22px}
+}
+
+</style>
+</head>
+<body>
+
+<div id="loader" aria-label="Loading portfolio">
+  <div class="loader-inner">
+    <div class="loader-kicker">Entering to Portfolio</div>
+    <div class="loader-name">SHUBHANKAR</div>
+    <div class="loader-percent" id="loadPercent">1%</div>
+    <div class="loader-track"><div class="loader-fill" id="loadFill"></div></div>
+    <div class="loader-status"><span>Loading modules...</span><span>Secure connection</span></div>
+  </div>
+</div>
+
+<header class="nav">
+  <a class="logo" href="#home">SHUBHANKAR.</a>
+  <nav class="nav-links">
+    <a href="#home">Home</a><a href="#about">About</a><a href="#skills">Skills</a>
+    <a href="#projects">Projects</a><a href="#certifications">Certifications</a><a href="#contact">Contact</a>
+  </nav>
+<button class="nav-cta" id="socialPopupBtn" type="button">
+  Let's Talk
+</button>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="eyebrow">Computer Science • Networking</div>
+    <h1>HI I'M<br>SHUBH</h1>
+    <div class="hero-role">Network Engineer • CCNA • MSc Computer Science</div>
+  </div>
+
+  <div class="hero-photo" aria-label="Profile photograph">
+    <!-- Put your photo at assets/profile.png -->
+    <img src="assets/profile.png" alt="Shubhankar profile photograph"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+    <div class="photo-placeholder" style="display:none">YOUR PHOTO / assets/profile.png</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="eyebrow">01 / System Profile</div>
+    <p>Computer Science postgraduate focused on networking, infrastructure, troubleshooting and practical Cisco technologies.</p>
+    <div class="hero-actions">
+
+  <!-- Resume -->
+  <a
+    class="btn light"
+    href="assets/SHUBHANKAR-RESUME.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    View Resume ↗
+  </a>
+
+  <button class="btn" type="button" id="contactBtn">
+  Contact Me
+</button>
+
+</div>
+  </div>
+  <div class="hero-bottom">↓ Scroll to explore</div>
+</section>
+
+<section class="section reveal" id="about">
+  <div class="section-grid">
+    <div>
+      <div class="eyebrow">02 / About Me</div>
+      <div class="section-title">ABOUT<br>ME.</div>
+      <div class="about-copy">
+        I'm Shubhankar, a Computer Science postgraduate building my career in Network Engineering.
+        I have a strong foundation in TCP/IP, OSI, IP addressing, subnetting, VLANs, DHCP,
+        routing, switching and network troubleshooting, with hands-on practice in Cisco Packet Tracer.
+      </div>
+      <div class="about-meta">
+        <span class="pill">CCNA Certified</span>
+        <span class="pill">MSc Computer Science</span>
+        <span class="pill">Network Engineering</span>
+        <span class="pill">BSc Computer Science</span>
+      </div>
+    </div>
+    <div class="about-photo">
+      <img src="assets/profiledp.jpg" alt="Shubhankar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+      <div class="about-placeholder" style="display:none">YOUR DP</div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" id="skills">
+  <div class="skills-wrap">
+    <div class="skills-head">
+      <div>
+        <div class="eyebrow">03 / Technical Stack</div>
+        <div class="section-title">TECHNICAL<br>SKILLS.</div>
+      </div>
+   <div class="about-copy">A focused technical stack built around networking, Cisco infrastructure, troubleshooting and software fundamentals.</div>
+    </div>
+
+    <div class="skills-grid">
+      <article class="skill-card"><div class="skill-number">01 — NETWORKING</div><h3>Networking</h3><div class="skill-list"><span>TCP/IP</span><span>OSI Model</span><span>IP Addressing</span><span>Subnetting</span><span>DNS</span><span>DHCP</span><span>ARP</span><span>LAN/WAN</span></div></article>
+      <article class="skill-card"><div class="skill-number">02 — CISCO</div><h3>Cisco</h3><div class="skill-list"><span>Packet Tracer</span><span>VLAN</span><span>Routing</span><span>Switching</span><span>Router Configuration</span><span>Switch Configuration</span></div></article>
+      <article class="skill-card"><div class="skill-number">03 — INFRASTRUCTURE</div><h3>Infrastructure</h3><div class="skill-list"><span>Network Troubleshooting</span><span>Firewall Basics</span><span>Cloud Fundamentals</span><span>AWS Fundamentals</span></div></article>
+      <article class="skill-card"><div class="skill-number">04 — DEVELOPMENT</div><h3>Development</h3><div class="skill-list"><span>Python</span><span>C</span><span>C++</span><span>SQL</span><span>Git</span><span>GitHub</span><span>HTML</span><span>CSS</span><span>JavaScript</span></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" id="projects">
+  <div class="skills-wrap">
+    <div class="eyebrow">04 / Selected Work</div>
+    <div class="section-title">PROJECTS.</div>
+    <div class="about-copy">Hands-on networking projects developed using Cisco Packet Tracer,
+  including multiple Cisco switch configurations, VLAN implementation,
+  IP addressing, subnetting, routing and switching, and practical network
+  troubleshooting. These projects demonstrate my ability to design,
+  configure, and manage Cisco-based network environments.</div>
+  </div>
+</section>
+
+<section class="section reveal" id="certifications">
+  <div class="skills-wrap">
+
+    <div class="eyebrow">05 / Credentials</div>
+
+    <div class="section-title">
+      CERTIFICATIONS.
+    </div>
+
+    <div class="about-copy">
+      <div class="about-copy">
+  Professional certifications that validate my networking knowledge,vCisco technology skills, and practical understanding 
+  of network infrastructure. These credentials reflect my commitment to continuous learning and developing industry-ready 
+  networking expertise.
+</div>
+    </div>
+
+    <div class="certification-card">
+
+      <div class="cert-info">
+        <div class="cert-number">01 — CISCO</div>
+
+        <h3>CCNA</h3>
+
+        <p>
+          Cisco Certified Network Associate
+        </p>
+
+        <span class="cert-status">
+          ● VERIFIED CERTIFICATION
+        </span>
+      </div>
+
+      <div class="cert-actions">
+
+        <!-- Certificate PDF -->
+        <a
+          href="assets/CCNA-Certificate.pdf"
+          target="_blank"
+          rel="noopener"
+          class="cert-btn cert-btn-primary"
+        >
+          <span>View Certificate</span>
+          <span>↗</span>
+        </a>
+
+        <!-- Credly / Cisco Verification -->
+        <a
+          href="https://www.credly.com/badges/03eba205-8ae8-494b-8e62-c501be7d1b0c"
+          target="_blank"
+          rel="noopener"
+          class="cert-btn"
+        >
+          <span>Verify Certificate</span>
+          <span>↗</span>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="footer reveal" id="contact">
+  <div class="eyebrow">06 / Contact</div>
+  <h2>LET'S<br>CONNECT.</h2>
+  <p>Network Engineering • Technical Support • Infrastructure</p>
+</section>
+</main>
+
+
+<!-- ===== ADDED: LET'S TALK SOCIAL POPUP ===== -->
+<div class="social-overlay" id="socialOverlay" aria-hidden="true">
+  <div class="social-popup" role="dialog" aria-modal="true" aria-labelledby="socialPopupTitle">
+
+    <button class="social-close" id="socialClose" type="button" aria-label="Close social media popup">×</button>
+
+    <div class="social-eyebrow">LET'S CONNECT</div>
+
+    <h2 id="socialPopupTitle">FIND ME<br><span>ONLINE.</span></h2>
+
+    <p>Connect with me across my social platforms.</p>
+
+    <div class="social-icons">
+
+      <!-- LinkedIn -->
+      <a
+        class="social-item linkedin"
+        href="https://www.linkedin.com/in/shubh2812/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        title="LinkedIn"
+      >
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+
+      <!-- Instagram -->
+      <a
+        class="social-item instagram"
+        href="YOUR_INSTAGRAM_LINK"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        title="Instagram"
+      >
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+
+      <!-- Email -->
+      <a
+        class="social-item email"
+        href="mailto:YOUR_EMAIL"
+        aria-label="Email"
+        title="Email"
+      >
+        <i class="fa-solid fa-envelope"></i>
+      </a>
+
+      <!-- WhatsApp -->
+      <a
+        class="social-item whatsapp"
+        href="https://wa.me/YOUR_NUMBER"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        title="WhatsApp"
+      >
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+
+      <!-- Facebook -->
+      <a
+        class="social-item facebook"
+        href="YOUR_FACEBOOK_LINK"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        title="Facebook"
+      >
+        <i class="fa-brands fa-facebook-f"></i>
+      </a>
+
+      <!-- Twitter / X -->
+      <a
+        class="social-item x-twitter"
+        href="YOUR_TWITTER_LINK"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Twitter"
+        title="Twitter"
+      >
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const loader=document.getElementById('loader');
+  const percent=document.getElementById('loadPercent');
+  const fill=document.getElementById('loadFill');
+  const start=performance.now(), duration=5000;
+
+  function tick(now){
+    const p=Math.min(100,1+((now-start)/duration)*99);
+    percent.textContent=Math.round(p)+'%';
+    fill.style.width=p+'%';
+    if(p<100) requestAnimationFrame(tick);
+    else setTimeout(()=>loader.classList.add('hide'),350);
+  }
+  requestAnimationFrame(tick);
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+  /* ===== ADDED: LET'S TALK POPUP ===== */
+  const socialPopupBtn=document.getElementById('socialPopupBtn');
+  const socialOverlay=document.getElementById('socialOverlay');
+  const socialClose=document.getElementById('socialClose');
+
+  function openSocialPopup(){
+    socialOverlay.classList.add('active');
+    socialOverlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeSocialPopup(){
+    socialOverlay.classList.remove('active');
+    socialOverlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+
+  if(socialPopupBtn && socialOverlay && socialClose){
+    socialPopupBtn.addEventListener('click',openSocialPopup);
+    socialClose.addEventListener('click',closeSocialPopup);
+
+    socialOverlay.addEventListener('click',(e)=>{
+      if(e.target===socialOverlay) closeSocialPopup();
+    });
+
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape' && socialOverlay.classList.contains('active')){
+        closeSocialPopup();
+      }
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

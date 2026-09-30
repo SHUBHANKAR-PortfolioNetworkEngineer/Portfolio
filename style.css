@@ -1,0 +1,640 @@
+/* =========================
+   CERTIFICATION
+========================= */
+
+.certification-card {
+  margin-top: 50px;
+  padding: 34px;
+  border: 1px solid #292929;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.045),
+      rgba(255,255,255,.01)
+    );
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.certification-card::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: -100px;
+  top: -100px;
+  background: radial-gradient(
+    circle,
+    rgba(255,255,255,.08),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.cert-info {
+  position: relative;
+  z-index: 1;
+}
+
+.cert-number {
+  font-size: 9px;
+  letter-spacing: .2em;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.cert-info h3 {
+  font-size: clamp(45px, 7vw, 80px);
+  line-height: .9;
+  letter-spacing: -.08em;
+  margin: 25px 0 12px;
+}
+
+.cert-info p {
+  margin: 0;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.cert-status {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 9px;
+  letter-spacing: .15em;
+  color: #999;
+}
+
+.cert-status::first-letter {
+  color: #fff;
+}
+
+.cert-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 210px;
+  position: relative;
+  z-index: 1;
+}
+
+.cert-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 14px 18px;
+  border: 1px solid #444;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #ddd;
+  transition: all .3s ease;
+}
+
+.cert-btn:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  transform: translateX(-5px);
+}
+
+.cert-btn-primary {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.cert-btn-primary:hover {
+  background: transparent;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+
+  .certification-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 25px;
+  }
+
+  .cert-actions {
+    width: 100%;
+  }
+
+}
+/* =========================================
+   MULTI-COLOR ANIMATED SKILL CARD HOVER
+========================================= */
+
+.skill-card {
+  position: relative;
+  overflow: hidden;
+
+  --accent: #00aaff;
+
+  transition:
+    transform .4s ease,
+    border-color .4s ease,
+    box-shadow .4s ease;
+}
+
+
+/* Different colors for each card */
+
+.skill-card:nth-child(1) {
+  --accent: #00aaff; /* Blue */
+}
+
+.skill-card:nth-child(2) {
+  --accent: #ff3b3b; /* Red */
+}
+
+.skill-card:nth-child(3) {
+  --accent: #20d47a; /* Green */
+}
+
+.skill-card:nth-child(4) {
+  --accent: #a855f7; /* Purple */
+}
+
+
+/* Animated background */
+
+.skill-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 180%;
+  height: 180%;
+
+  left: -40%;
+  top: -40%;
+
+  background:
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 45%
+    );
+
+  opacity: 0;
+
+  transform: scale(.7);
+
+  transition:
+    opacity .5s ease,
+    transform .8s ease;
+
+  animation: skillGlow 5s linear infinite;
+
+  pointer-events: none;
+}
+
+
+/* Moving light */
+
+.skill-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 160%;
+  height: 2px;
+
+  left: -130%;
+  top: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent),
+    transparent
+  );
+
+  opacity: 0;
+
+  filter: blur(1px);
+
+  pointer-events: none;
+}
+
+
+/* Hover */
+
+.skill-card:hover {
+  transform: translateY(-8px);
+
+  border-color: var(--accent);
+
+  box-shadow:
+    0 20px 60px color-mix(
+      in srgb,
+      var(--accent) 15%,
+      transparent
+    ),
+    inset 0 0 40px color-mix(
+      in srgb,
+      var(--accent) 4%,
+      transparent
+    );
+}
+
+.skill-card:hover::before {
+  opacity: 1;
+
+  transform: scale(1);
+
+  animation:
+    skillGlow 4s ease-in-out infinite;
+}
+
+.skill-card:hover::after {
+  opacity: .8;
+
+  animation: skillScan 2.8s linear infinite;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.skill-card > * {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* Number */
+
+.skill-card:hover .skill-number {
+  color: var(--accent);
+
+  transition: color .3s ease;
+}
+
+
+/* Heading */
+
+.skill-card:hover h3 {
+  color: #fff;
+
+  text-shadow:
+    0 0 25px color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
+
+  transition: .3s ease;
+}
+
+
+/* Skill pills */
+
+.skill-card:hover .skill-list span {
+  border-color: color-mix(
+    in srgb,
+    var(--accent) 40%,
+    #292929
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--accent) 6%,
+    transparent
+  );
+
+  transition:
+    border-color .3s ease,
+    background .3s ease,
+    color .3s ease;
+}
+
+
+/* Individual pill hover */
+
+.skill-card .skill-list span:hover {
+  color: #fff;
+
+  border-color: var(--accent);
+
+  background: color-mix(
+    in srgb,
+    var(--accent) 16%,
+    transparent
+  );
+
+  box-shadow:
+    0 0 18px color-mix(
+      in srgb,
+      var(--accent) 18%,
+      transparent
+    );
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes skillGlow {
+
+  0% {
+    transform: translate(
+      -10%,
+      -5%
+    ) scale(.8);
+  }
+
+  50% {
+    transform: translate(
+      10%,
+      8%
+    ) scale(1.05);
+  }
+
+  100% {
+    transform: translate(
+      -10%,
+      -5%
+    ) scale(.8);
+  }
+
+}
+
+
+@keyframes skillScan {
+
+  0% {
+    left: -130%;
+  }
+
+  100% {
+    left: 130%;
+  }
+
+}
+/* =========================================
+   CERTIFICATION CARD - ANIMATED HOVER
+========================================= */
+
+.certification-card {
+  position: relative;
+  overflow: hidden;
+
+  --cert-accent: #e3262e;
+
+  transition:
+    transform .4s ease,
+    border-color .4s ease,
+    box-shadow .4s ease,
+    background .4s ease;
+}
+
+
+/* Animated background glow */
+
+.certification-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 170%;
+  height: 170%;
+
+  left: -35%;
+  top: -35%;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(227, 38, 46, .18),
+      transparent 48%
+    );
+
+  opacity: 0;
+
+  transform: scale(.7);
+
+  pointer-events: none;
+
+  transition:
+    opacity .5s ease,
+    transform .8s ease;
+
+  animation: certificationGlow 5s ease-in-out infinite;
+}
+
+
+/* Moving scan light */
+
+.certification-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 140%;
+  height: 2px;
+
+  left: -120%;
+  top: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--cert-accent),
+    transparent
+  );
+
+  opacity: 0;
+
+  filter: blur(1px);
+
+  pointer-events: none;
+}
+
+
+/* Hover */
+
+.certification-card:hover {
+
+  transform: translateY(-7px);
+
+  border-color: var(--cert-accent);
+
+  background: #110b0b;
+
+  box-shadow:
+    0 20px 60px rgba(227, 38, 46, .14),
+    inset 0 0 40px rgba(227, 38, 46, .035);
+}
+
+
+.certification-card:hover::before {
+
+  opacity: 1;
+
+  transform: scale(1);
+
+  animation:
+    certificationGlow 4s ease-in-out infinite;
+}
+
+
+.certification-card:hover::after {
+
+  opacity: .8;
+
+  animation:
+    certificationScan 2.8s linear infinite;
+}
+
+
+/* Keep content above animation */
+
+.certification-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================
+   CERTIFICATION TEXT HOVER
+========================================= */
+
+.certification-card:hover .cert-number {
+
+  color: var(--cert-accent);
+
+  transition: color .3s ease;
+}
+
+
+.certification-card:hover .cert-info h3 {
+
+  color: #fff;
+
+  text-shadow:
+    0 0 25px rgba(227, 38, 46, .25);
+
+  transition: .3s ease;
+}
+
+
+.certification-card:hover .cert-status {
+
+  color: #ff555d;
+
+  transition: .3s ease;
+}
+
+
+/* =========================================
+   CERTIFICATION BUTTONS
+========================================= */
+
+.certification-card .cert-btn {
+
+  transition:
+    transform .25s ease,
+    background .3s ease,
+    border-color .3s ease,
+    color .3s ease,
+    box-shadow .3s ease;
+}
+
+
+.certification-card .cert-btn:hover {
+
+  transform: translateX(5px);
+
+  border-color: var(--cert-accent);
+
+  box-shadow:
+    0 0 22px rgba(227, 38, 46, .15);
+}
+
+
+/* Primary certificate button */
+
+.certification-card .cert-btn-primary:hover {
+
+  background: var(--cert-accent);
+
+  color: #fff;
+
+  border-color: var(--cert-accent);
+}
+
+
+/* =========================================
+   CCNA LOGO
+========================================= */
+
+.certification-card .cert-logo img {
+
+  transition:
+    transform .5s ease,
+    filter .5s ease;
+}
+
+
+.certification-card:hover .cert-logo img {
+
+  transform: scale(1.06);
+
+  filter:
+    drop-shadow(
+      0 0 18px rgba(227, 38, 46, .25)
+    );
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes certificationGlow {
+
+  0% {
+    transform:
+      translate(-8%, -5%)
+      scale(.8);
+  }
+
+  50% {
+    transform:
+      translate(8%, 8%)
+      scale(1.05);
+  }
+
+  100% {
+    transform:
+      translate(-8%, -5%)
+      scale(.8);
+  }
+
+}
+
+
+@keyframes certificationScan {
+
+  0% {
+    left: -120%;
+  }
+
+  100% {
+    left: 120%;
+  }
+
+}
